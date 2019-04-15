@@ -26,9 +26,15 @@ lastDiastolic = lastDiastolic.transform(lambda x: x.fillna(x.mean()))
 
 # Plot the distributions
 plt.hist(lastSystolic)
+plt.title('Last Systolic Measurement of Past 12 Months')
+plt.xlabel('Systolic Reading')
+plt.ylabel('Observations')
 plt.show()
 
 plt.hist(lastDiastolic)
+plt.title('Last Diastolic Measurement of Past 12 Months')
+plt.xlabel('Diastolic Reading')
+plt.ylabel('Observations')
 plt.show()
 
 
