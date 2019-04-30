@@ -1,3 +1,8 @@
 .idea
 HW1/venv
 *.csv
+*.pdf
+*.xlsx
+*.docx
+*.icloud
+.DS_Store
