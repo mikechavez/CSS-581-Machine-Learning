@@ -8,10 +8,6 @@ grnd = pd.read_csv('training_groundtruth.csv')
 print(imp.info())
 print(grnd.info())
 
-print(imp.index)
-
-
-
 # Get indices with missing data in ground truth
 indices_missing = pd.isnull(grnd).any(1).nonzero()[0]
 
