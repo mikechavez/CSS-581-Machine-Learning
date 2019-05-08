@@ -4,26 +4,34 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 imp = pd.read_csv('training_with_imputed.csv')
 grnd = pd.read_csv('training_groundtruth.csv')
+train = pd.read_csv('training_with_missing.csv')
 
 print(imp.info())
 print(grnd.info())
 
+
 # Get indices with missing data in ground truth
-indices_missing = pd.isnull(grnd).any(1).nonzero()[0]
+indices_missing_grnd = pd.isnull(grnd).any(1).nonzero()[0]
+indices_missing_train = pd.isnull(train).any(1).nonzero()[0]
 
 # Check shape of np array
-print(np.shape(indices_missing))
+print(np.shape(indices_missing_grnd))
 
 # Convert NP array to PD DataFrame
-indices_missing = pd.DataFrame(data=indices_missing.flatten(),columns=['missing_rows'])
-print(indices_missing)
+indices_missing_grnd = pd.DataFrame(data=indices_missing_grnd.flatten(), columns=['eval_rows'])
+indices_missing_train = pd.DataFrame(data=indices_missing_train.flatten(), columns=['eval_rows'])
 
-# Delete rows with missing data
-imp = imp.drop(indices_missing['missing_rows'])
-grnd = grnd.drop(indices_missing['missing_rows'])
+eval_rows = pd.merge(indices_missing_train, indices_missing_grnd, on='eval_rows', how='left', indicator=True).query('_merge == "left_only"').drop('_merge', 1)
 
-imp.to_csv(r'./imputed_removed_rows.csv', index=None, header=True)
-grnd.to_csv(r'./training_groundtruth_removed_rows.csv', index=None, header=True)
+# Remove all rows except the ones we want to evaluate
+imp = imp[imp.index.isin(eval_rows['eval_rows'])]
+grnd = grnd[grnd.index.isin(eval_rows['eval_rows'])]
+train = train[train.index.isin(eval_rows['eval_rows'])]
+
+# Confirm indices for evaluation
+print(imp)
+print(grnd)
+print(train)
 
 
 
