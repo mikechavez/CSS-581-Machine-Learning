@@ -28,6 +28,9 @@ imp = imp[imp.index.isin(eval_rows['eval_rows'])]
 grnd = grnd[grnd.index.isin(eval_rows['eval_rows'])]
 train = train[train.index.isin(eval_rows['eval_rows'])]
 
+imp.to_csv('training_with_imputed_eval.csv')
+grnd.to_csv('ground_truth_eval.csv')
+
 # Confirm indices for evaluation
 print(imp)
 print(grnd)
@@ -40,29 +43,31 @@ print(imp.info())
 print(grnd.info())
 
 
+# not working; used excel for time being
+diff = imp.set_index(["CHARTTIME"]) - grnd.set_index(["CHARTTIME"]).reset_index()
+print(diff)
 
-
-for column in imp:
-    n = imp.shape[0]
-    max = grnd[column].max()
-    min = grnd[column].min()
-
-    rmse = (((imp[column] - grnd[column]) / (max-min)) ** 2).mean() ** .5
-    print ("RSME for ", column, ": ", rmse)
-
-print("\n\n\n")
-
-for column in imp:
-    max = grnd[column].max()
-    min = grnd[column].min()
-    ground_truth = grnd[column]
-    imputed_data = imp[column]
-    # print("ground truth: ", ground_truth)
-    # print("imputed: ", imputed_data)
-
-    mse = (mean_squared_error(ground_truth, imputed_data))
-    rmse = (mse / (max-min)) ** .5
-
-    print ("RSME for ", column, ": ", rmse)
+# for column in imp:
+#     n = imp.shape[0]
+#     max = grnd[column].max()
+#     min = grnd[column].min()
+#
+#     rmse = (((imp[column] - grnd[column]) / (max-min)) ** 2).mean() ** .5
+#     print ("RSME for ", column, ": ", rmse)
+#
+# print("\n\n\n")
+#
+# for column in imp:
+#     max = grnd[column].max()
+#     min = grnd[column].min()
+#     ground_truth = grnd[column]
+#     imputed_data = imp[column]
+#     # print("ground truth: ", ground_truth)
+#     # print("imputed: ", imputed_data)
+#
+#     mse = (mean_squared_error(ground_truth, imputed_data))
+#     rmse = (mse / (max-min)) ** .5
+#
+#     print ("RSME for ", column, ": ", rmse)
 
 
