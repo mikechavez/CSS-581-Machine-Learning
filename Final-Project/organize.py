@@ -38,8 +38,11 @@ t4 = addColumn(t4, 'dataset','traditional_4')
 ff = addColumn(ff, 'dataset','fake_followers')
 gu = addColumn(gu, 'dataset','genuine_users')
 
-data = [s1, s2, s3, t1, t2, t3, t4, ff, gu]
+# Fill NAs
+s1 = fillNA(s1, 'geo_enabled', 0)
+s1 = fillNA(s1, 'default_profile', 0)
 
+# Export files to csv
 s1.to_csv('social_1.csv')
 s2.to_csv('social_2.csv')
 s3.to_csv('social_3.csv')
@@ -50,6 +53,4 @@ t4.to_csv('traditional_4.csv')
 ff.to_csv('fake_followers.csv')
 gu.to_csv('genuine.csv')
 
-s1 = fillNA(s1, 'geo_enabled', 0)
-s1 = fillNA(s1, 'default_profile', 0)
-# print(s1.info())
+
